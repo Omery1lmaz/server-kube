@@ -1,0 +1,74 @@
+import express from 'express'
+import mongoose from 'mongoose'
+import nats from 'node-nats-streaming'
+import { natsWrapper } from './nats-wrapper';
+import { OrderStatus, Publisher, } from '@heaven-nsoft/common'
+import { UserCreatedPublisher } from './events/publishers/user-created-publisher';
+
+const app = express();
+
+app.use((req, res, next) => {
+    console.log("Auth service")
+    res.status(200).send("Hello from auth service")
+})
+const start = async () => {
+    try {
+        if (!process.env.MONGO_URI) {
+            throw new Error("MONGO_URI must be provided")
+        }
+        if (!process.env.NATS_CLIENT_ID) {
+            throw new Error('NATS_CLIENT_ID must be defined');
+        }
+        if (!process.env.NATS_URL) {
+            throw new Error('NATS_URL must be defined');
+        }
+        if (!process.env.NATS_CLUSTER_ID) {
+            throw new Error('NATS_CLUSTER_ID must be defined');
+        }
+        try {
+            await natsWrapper.connect(
+                process.env.NATS_CLUSTER_ID,
+                process.env.NATS_CLIENT_ID,
+                process.env.NATS_URL
+            );
+            natsWrapper.client.on('close', () => {
+                console.log('NATS connection closed!');
+                process.exit();
+            });
+            new UserCreatedPublisher(natsWrapper.client).publish({
+                expiresAt: "new Date().toISOString()",
+                id: "1212",
+                status: OrderStatus.Created,
+                userId: "1212",
+                version: 1,
+                ticket: {
+                    id: "2112",
+                    price: 10
+                }
+            })
+            process.on('SIGINT', () => natsWrapper.client.close());
+            process.on('SIGTERM', () => natsWrapper.client.close());
+        } catch (err) {
+            console.error(err);
+        }
+        try {
+            await mongoose.connect(process.env.MONGO_URI)
+            console.log("Connected to database !!!")
+
+        } catch (error) {
+            console.error("Error connecting to database: ", error)
+        }
+        app.use((req, res, next) => {
+            console.log("Auth service")
+            next()
+        })
+        app.listen(3000, (err) => {
+            if (!err)
+                console.log("Auth service listening on port 3000 !!!")
+        })
+
+    } catch (error) {
+        console.log("Something went wrong", error)
+    }
+}
+start()
