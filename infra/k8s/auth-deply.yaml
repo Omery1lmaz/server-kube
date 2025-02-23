@@ -19,13 +19,13 @@ spec:
             - name: NATS_CLUSTER_ID
               value: ticketing
             - name: MONGO_URI
-              value: 'mongodb://auth-mongo-srv:27017/auth'
+              value: "mongodb://auth-mongo-srv:27017/auth"
             - name: NATS_CLIENT_ID
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
             - name: NATS_URL
-              value: 'nats://nats-srv:4222'  # NATS URL protokolü tcp (nats://) olarak güncellendi
+              value: "http://nats-srv:4222"
           ports:
             - containerPort: 3000
 ---
