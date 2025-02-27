@@ -18,6 +18,10 @@ spec:
           env:
             - name: NATS_CLUSTER_ID
               value: ticketing
+            - name: SECRET_KEY
+              value: SECRET_KEY
+            - name: RESET_PASSWORD_SECRET_KEY
+              value: SECRET_KEY
             - name: MONGO_URI
               value: "mongodb://auth-mongo-srv:27017/auth"
             - name: NATS_CLIENT_ID
