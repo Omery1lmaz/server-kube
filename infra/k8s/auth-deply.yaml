@@ -16,6 +16,10 @@ spec:
         - name: auth
           image: 076161/heaven-auth
           env:
+            - name: EMAIL_USER
+              value: omery020040@gmail.com
+            - name: EMAIL_PASS
+              value: wgbehbiaqxlthblt
             - name: NATS_CLUSTER_ID
               value: ticketing
             - name: SECRET_KEY
