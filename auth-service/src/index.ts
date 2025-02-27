@@ -1,17 +1,10 @@
-import express from "express";
 import mongoose from "mongoose";
 import nats from "node-nats-streaming";
 import { natsWrapper } from "./nats-wrapper";
 import { OrderStatus, Publisher } from "@heaven-nsoft/common";
 import { UserCreatedPublisher } from "./events/publishers/user-created-publisher";
+import { app } from "./app";
 
-const app = express();
-app.set("trust proxy", true);
-
-app.use((req, res, next) => {
-  console.log("Auth service");
-  res.status(200).send("Hello from auth service");
-});
 const start = async () => {
   try {
     if (!process.env.MONGO_URI) {
@@ -25,6 +18,12 @@ const start = async () => {
     }
     if (!process.env.NATS_CLUSTER_ID) {
       throw new Error("NATS_CLUSTER_ID must be defined");
+    }
+    if (!process.env.RESET_PASSWORD_SECRET_KEY) {
+      throw new Error("RESET_PASSWORD_SECRET_KEY must be defined");
+    }
+    if (!process.env.SECRET_KEY) {
+      throw new Error("SECRET_KEY must be defined");
     }
     try {
       await natsWrapper.connect(
@@ -62,8 +61,11 @@ const start = async () => {
       console.log("Auth service");
       next();
     });
-    app.listen(3000, (err) => {
-      if (!err) console.log("Auth service listening on port 3000 !!!");
+    const listen = app.listen(3000, () => {
+      console.log("Auth service listening on port 3000!");
+    });
+    listen.on("error", (err) => {
+      console.error("Server error: ", err);
     });
   } catch (error) {
     console.log("Something went wrong", error);
