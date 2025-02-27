@@ -1,15 +1,15 @@
 import express from "express";
 import { validateRequest } from "@heaven-nsoft/common";
-import signinController from "../controllers/signin";
 import signinExpressValidator from "../expressValidators/signin";
+import signupController from "../controllers/signup";
 
 const router = express.Router();
 
 router.post(
-  "/signin",
+  "/signup",
   signinExpressValidator,
   validateRequest,
-  signinController
+  signupController
 );
 
-export { router as signinRouter };
+export { router as signupRouter };
