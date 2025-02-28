@@ -17,6 +17,7 @@ interface UserAttrs {
   resetPasswordToken?: string;
   otp?: string;
   resetPasswordOtpExpires?: Date;
+  otpExpires?: Date;
   isDeleted?: boolean;
   imageUrl?: string;
   waiter?: mongoose.Schema.Types.ObjectId;
@@ -37,6 +38,7 @@ interface UserDoc extends mongoose.Document {
   resetPasswordOtp?: string;
   resetPasswordToken?: string;
   otp?: string;
+  otpExpires?: Date;
   resetPasswordOtpExpires?: Date;
   isDeleted: boolean;
   imageUrl: string;
@@ -77,6 +79,7 @@ const userSchema = new mongoose.Schema<UserDoc>(
     resetPasswordToken: { type: String },
     otp: { type: String },
     resetPasswordOtpExpires: { type: Date },
+    otpExpires: { type: Date },
     isDeleted: { type: Boolean, required: true, default: false },
     imageUrl: {
       type: String,
