@@ -12,12 +12,18 @@ import { resetPasswordVerifyOTPRouter } from "./routes/resetPasswordVerifyOTP";
 import { profileRouter } from "./routes/profile";
 import { deleteProfileRouter } from "./routes/deleteProfile";
 import { checkRegisterEmailRouter } from "./routes/checkRegisterEmail";
+import { resetPasswordRouter } from "./routes/resetPassword";
+import { resetPasswordSendEmailRouter } from "./routes/resetPasswordSendEmail";
+import { updatePasswordRouter } from "./routes/updatePassword";
+import { detailRouter } from "./routes/details";
+import { updateUserNameRouter } from "./routes/updateUserName";
 
 const app = express();
 app.set("trust proxy", true);
 app.use(json());
 app.use(signinRouter);
 app.use(signupRouter);
+app.use(detailRouter);
 app.use(verifyRegisterRouter);
 app.use(googleSigninRouter);
 app.use(updatePhoneNumberRouter);
@@ -27,6 +33,10 @@ app.use(resetPasswordVerifyOTPRouter);
 app.use(profileRouter);
 app.use(checkRegisterEmailRouter);
 app.use(deleteProfileRouter);
+app.use(resetPasswordRouter);
+app.use(resetPasswordSendEmailRouter);
+app.use(updatePasswordRouter);
+app.use(updateUserNameRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();

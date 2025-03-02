@@ -6,4 +6,4 @@ const router = express.Router();
 
 router.post("/details", validateRequest, detailsController);
 
-export { router as deleteProfileRouter };
+export { router as detailRouter };

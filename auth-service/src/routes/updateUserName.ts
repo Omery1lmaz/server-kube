@@ -12,4 +12,4 @@ router.post(
   updateUserNameController
 );
 
-export { router as forgetPasswordResendOTPRouter };
+export { router as updateUserNameRouter };

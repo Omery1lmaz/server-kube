@@ -4,6 +4,7 @@ import { User } from "../Models/user";
 import { createToken } from "../helpers/createToken";
 import nodemailer from "nodemailer";
 import { generateOTP } from "../helpers/generateOTP";
+import transporter from "../utils/mailTransporter";
 
 export const signupController = async (req: Request, res: Response) => {
   try {
@@ -26,15 +27,6 @@ export const signupController = async (req: Request, res: Response) => {
 
     await newUser.save();
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-      secure: true,
-    });
-
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
@@ -42,7 +34,7 @@ export const signupController = async (req: Request, res: Response) => {
       text: `Here is your OTP token: ${otpToken}`,
     });
 
-    const token = createToken(newUser._id as string);
+    const token = createToken(JSON.stringify(newUser._id));
 
     return res.status(201).json({
       message: "Emailinizi onaylayınız",

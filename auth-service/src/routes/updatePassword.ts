@@ -14,4 +14,4 @@ router.post(
   resetPasswordController
 );
 
-export { router as resetPasswordRouter };
+export { router as updatePasswordRouter };
