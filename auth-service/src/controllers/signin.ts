@@ -32,7 +32,7 @@ export const signinController = async (req: Request, res: Response) => {
     throw new BadRequestError("Hesap bilgileri uyuşmuyor");
   }
 
-  const token = createToken(user._id as string);
+  const token = createToken(JSON.stringify(user._id));
 
   res.cookie("token", token, {
     httpOnly: true,
@@ -40,7 +40,7 @@ export const signinController = async (req: Request, res: Response) => {
     sameSite: "strict",
   });
 
-  return res.status(200).json({
+  res.status(200).json({
     _id: user._id,
     email: user.email,
     name: user.name,
