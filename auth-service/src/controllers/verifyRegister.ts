@@ -16,28 +16,29 @@ export const verifyRegisterController = async (req: Request, res: Response) => {
 
     const user = await User.findById(decodedToken.id);
     if (!user) {
-      return res.status(400).json({
+      res.status(400).json({
         isVerify: true,
         message: "Kullanıcı yok",
       });
+      return;
     }
 
     if (user.isActive) {
-      return res.status(201).json({
+      res.status(201).json({
         isVerify: true,
         message: "Kullanıcı Emaili onaylandı",
       });
     }
 
     if (user.otpExpires && new Date(user.otpExpires) < new Date()) {
-      return res.status(400).json({
+      res.status(400).json({
         isVerify: true,
         message: "Otp süresi dolmuş",
       });
     }
 
     if (parseInt(user.otp || "") !== parseInt(otp)) {
-      return res.status(400).json({
+      res.status(400).json({
         message: "Girdiğiniz OTP uyuşmuyor",
       });
     }
@@ -51,7 +52,7 @@ export const verifyRegisterController = async (req: Request, res: Response) => {
     const newToken = createToken(JSON.stringify(user._id));
     res.cookie("token", newToken);
 
-    return res.status(201).json({
+    res.status(201).json({
       isVerify: true,
       message: "Hesabınız Onaylandı",
       user: {
@@ -62,10 +63,11 @@ export const verifyRegisterController = async (req: Request, res: Response) => {
       },
     });
   } catch (err) {
-    return res.status(400).json({
+    res.status(400).json({
       isVerify: true,
       message: "Token geçersiz veya kullanıcı yok",
     });
+    return;
   }
 };
 

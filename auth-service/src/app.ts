@@ -1,5 +1,5 @@
 import { json } from "body-parser";
-import express from "express";
+import express, { NextFunction } from "express";
 import { signinRouter } from "./routes/signin";
 import { errorHandler, NotFoundError } from "@heaven-nsoft/common";
 import { signupRouter } from "./routes/signup";
@@ -38,8 +38,8 @@ app.use(resetPasswordSendEmailRouter);
 app.use(updatePasswordRouter);
 app.use(updateUserNameRouter);
 
-app.all("*", async (req, res) => {
-  throw new NotFoundError();
+app.all("*", async (req, res, next: NextFunction) => {
+  next(new NotFoundError());
 });
 app.use(errorHandler);
 

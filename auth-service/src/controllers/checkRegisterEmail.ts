@@ -12,10 +12,11 @@ export const checkRegisterEmailController = async (
   const user = await User.findOne({ email });
 
   if (user) {
-    return res.status(409).json({ message: "Bu kullanıcı zaten mevcut" });
+    res.status(409).json({ message: "Bu kullanıcı zaten mevcut" });
+    return;
   }
 
-  return res.status(200).json({ exists: false });
+  res.status(200).json({ exists: false });
 };
 
 export default checkRegisterEmailController;

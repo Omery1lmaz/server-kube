@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import { User } from "../Models/user";
 import { BadRequestError } from "@heaven-nsoft/common";
-import { createToken, generateOTP } from "../helpers/createToken";
+import { createToken } from "../helpers/createToken";
 import jwt from "jsonwebtoken";
 import { DecodedToken } from "../types/decodedToken";
+import { generateOTP } from "../helpers/generateOTP";
 export const registerResendOTPController = async (
   req: Request,
   res: Response
@@ -17,12 +18,13 @@ export const registerResendOTPController = async (
 
     const existUser = await User.findById(decodedToken.id);
     if (!existUser || existUser.isActive) {
-      return res.status(404).json({
+      res.status(404).json({
         message: "User not found",
         success: false,
         data: null,
         error: true,
       });
+      return;
     }
 
     const newOtp = generateOTP();
@@ -30,7 +32,7 @@ export const registerResendOTPController = async (
     existUser.otpExpires = new Date(Date.now() + 10 * 60 * 1000);
     await existUser.save();
 
-    return res.status(200).json({
+    res.status(200).json({
       message: "OTP sent successfully",
       success: true,
       data: null,
@@ -39,7 +41,7 @@ export const registerResendOTPController = async (
   } catch (error) {
     console.error("Error resending OTP:", error);
 
-    return res.status(400).json({
+    res.status(400).json({
       message: "Invalid token or user not found",
       success: false,
       data: null,

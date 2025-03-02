@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { User } from "../Models/user";
 import { BadRequestError, NotAuthorizedError } from "@heaven-nsoft/common";
 import { createToken } from "../helpers/createToken";
@@ -6,7 +6,8 @@ import jwt from "jsonwebtoken";
 import { DecodedToken } from "../types/decodedToken";
 export const updatePhoneNumberController = async (
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) => {
   const { number } = req.body;
 
@@ -17,13 +18,9 @@ export const updatePhoneNumberController = async (
       token,
       process.env.SECRET_KEY as string
     ) as DecodedToken;
-    if (!decodedToken || !decodedToken.id) {
-      throw new NotAuthorizedError();
-      return;
-    }
     const existUser = await User.findById(decodedToken.id);
     if (!existUser) {
-      throw new BadRequestError("Kullanıcı bulunamadı");
+      next(new BadRequestError("Kullanıcı bulunamadı"));
       return;
     }
     existUser.number = number;

@@ -1,5 +1,5 @@
 import { param } from "express-validator";
 const registerResendExpressValidator = [
-  param("token").withMessage("token gereklidir"),
+  param("token").notEmpty().withMessage("token gereklidir"),
 ];
 export default registerResendExpressValidator;

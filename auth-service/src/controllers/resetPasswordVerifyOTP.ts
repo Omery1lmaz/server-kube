@@ -12,16 +12,17 @@ export const resetPasswordVerifyOTPController = async (
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({
+      res.status(400).json({
         message: "Kullanıcı bulunamadı veya hesap onaylanmamış",
       });
+      return;
     }
 
     const secret = `${process.env.RESET_PASSWORD_SECRET_KEY}-${user.password}`;
 
     jwt.verify(token, secret, async (err) => {
       if (err) {
-        return res.status(400).json({
+        res.status(400).json({
           message: "Şifre değiştirme linki geçerli değil",
         });
       }
@@ -30,7 +31,7 @@ export const resetPasswordVerifyOTPController = async (
         !user.resetPasswordOtpExpires ||
         user.resetPasswordOtpExpires < new Date()
       ) {
-        return res.status(400).json({
+        res.status(400).json({
           isVerify: true,
           message: "OTP süresi dolmuş",
         });
@@ -40,12 +41,12 @@ export const resetPasswordVerifyOTPController = async (
         !user.resetPasswordOtp ||
         parseInt(user.resetPasswordOtp, 10) !== parseInt(otp, 10)
       ) {
-        return res.status(400).json({
+        res.status(400).json({
           message: "Girdiğiniz OTP uyuşmuyor",
         });
       }
 
-      return res.status(200).json({
+      res.status(200).json({
         message: "Şifre değiştirme linki geçerli",
         status: "success",
         statusCode: 200,
@@ -53,7 +54,7 @@ export const resetPasswordVerifyOTPController = async (
     });
   } catch (error) {
     console.error("Hata:", error);
-    return res.status(500).json({
+    res.status(500).json({
       message: "Sunucu hatası, lütfen tekrar deneyin",
     });
   }

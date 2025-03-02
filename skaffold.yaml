@@ -1,11 +1,11 @@
 apiVersion: skaffold/v2alpha3
 kind: Config
-deploy: 
+deploy:
   kubectl:
     manifests:
       - ./infra/k8s/*
 build:
-  local: 
+  local:
     push: false
   artifacts:
     - image: 076161/heaven-order
@@ -14,7 +14,7 @@ build:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: 'src/**/*.ts'
+          - src: "src/**/*.ts"
             dest: .
     - image: 076161/heaven-auth
       context: auth-service
@@ -22,13 +22,5 @@ build:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: 'src/**/*.ts'
-            dest: .
-    - image: auth-mongo
-      context: auth-service
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: 'src/**/*.ts'
+          - src: "src/**/*.ts"
             dest: .

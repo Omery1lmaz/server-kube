@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { User } from "../Models/user";
 import { BadRequestError } from "@heaven-nsoft/common";
 import { generateOTP } from "../helpers/generateOTP";
@@ -8,7 +8,8 @@ import { DecodedToken } from "../types/decodedToken";
 
 export const forgetPasswordResendOTPController = async (
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) => {
   const { token, email } = req.query;
 
@@ -16,12 +17,13 @@ export const forgetPasswordResendOTPController = async (
     const existUser = await User.findOne({ email });
 
     if (!existUser) {
-      return res.status(404).send({
+      res.status(404).send({
         message: "User not found",
         success: false,
         data: null,
         error: true,
       });
+      return;
     }
 
     const secret =
@@ -32,10 +34,10 @@ export const forgetPasswordResendOTPController = async (
         secret as string
       ) as DecodedToken;
       if (!decodedToken?.id || decodedToken.id !== existUser._id.toString()) {
-        throw new Error("Invalid token");
+        next(new BadRequestError("Invalid token"));
       }
     } catch (error) {
-      return res.status(400).json({
+      res.status(400).json({
         message: "Invalid or expired reset password link",
         success: false,
         data: null,
@@ -63,7 +65,7 @@ export const forgetPasswordResendOTPController = async (
       text: url,
     });
 
-    return res.status(200).send({
+    res.status(200).send({
       message: "OTP sent successfully",
       success: true,
       data: {
@@ -74,7 +76,7 @@ export const forgetPasswordResendOTPController = async (
   } catch (error) {
     console.error("Error resending OTP:", error);
 
-    return res.status(500).send({
+    res.status(500).send({
       message: "Internal server error",
       success: false,
       data: null,

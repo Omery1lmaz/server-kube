@@ -1,5 +1,5 @@
 import { body } from "express-validator";
 const updatePhoneNumberExpressValidator = [
-  body("number").withMessage("number"),
+  body("number").notEmpty().withMessage("number"),
 ];
 export default updatePhoneNumberExpressValidator;

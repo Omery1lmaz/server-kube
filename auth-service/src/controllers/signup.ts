@@ -9,10 +9,11 @@ import transporter from "../utils/mailTransporter";
 export const signupController = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-
+    console.log("email test", email);
     const existingUser = await User.findOne({ email, isActive: false });
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      res.status(400).json({ message: "User already exists" });
+      return;
     }
 
     const otpToken = generateOTP();
@@ -36,15 +37,13 @@ export const signupController = async (req: Request, res: Response) => {
 
     const token = createToken(JSON.stringify(newUser._id));
 
-    return res.status(201).json({
+    res.status(201).json({
       message: "Emailinizi onaylayınız",
       token,
     });
   } catch (error) {
     console.error("Kayıt sırasında hata oluştu:", error);
-    return res
-      .status(500)
-      .json({ message: "Sunucu hatası, lütfen tekrar deneyin" });
+    res.status(500).json({ message: "Sunucu hatası, lütfen tekrar deneyin" });
   }
 };
 

@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 const signinExpressValidator = [
-  body("email").isEmail().withMessage("Geçerli bir email giriniz"),
+  body("email").notEmpty().isEmail().withMessage("Geçerli bir email giriniz"),
   body("password").trim().notEmpty().withMessage("Şifre gereklidir"),
 ];
 

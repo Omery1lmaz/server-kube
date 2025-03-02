@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 const googleSigninExpressValidator = [
-  body("idToken").withMessage("idToken bir email giriniz"),
+  body("idToken").notEmpty().withMessage("idToken bir email giriniz"),
   body("serverAuthCode")
     .trim()
     .notEmpty()

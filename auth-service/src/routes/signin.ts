@@ -9,7 +9,6 @@ router.post(
   "/signin",
   signinExpressValidator,
   validateRequest,
-
   signinController
 );
 

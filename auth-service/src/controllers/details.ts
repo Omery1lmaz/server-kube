@@ -7,13 +7,15 @@ export const detailsController = async (req: Request, res: Response) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    return res.status(401).json({ message: "Lütfen giriş yapın" });
+    res.status(401).json({ message: "Lütfen giriş yapın" });
+    return;
   }
 
   const token = authHeader.split(" ")[1];
 
   if (!token) {
-    return res.status(400).json({ message: "Token bulunamadı" });
+    res.status(400).json({ message: "Token bulunamadı" });
+    return;
   }
 
   try {
@@ -23,17 +25,17 @@ export const detailsController = async (req: Request, res: Response) => {
 
     const user = await User.findById(decodedToken.id);
     if (!user) {
-      return res.status(404).json({ message: "Kullanıcı bulunamadı" });
+      res.status(404).json({ message: "Kullanıcı bulunamadı" });
+      return;
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       _id: user._id,
       email: user.email,
       name: user.name,
     });
   } catch (error) {
-    console.error("Kimlik doğrulama hatası:", error);
-    return res.status(400).json({ message: "Kimlik doğrulama başarısız" });
+    res.status(400).json({ message: "Kimlik doğrulama başarısız" });
   }
 };
 

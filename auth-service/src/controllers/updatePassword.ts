@@ -8,7 +8,8 @@ export const updatePasswordController = async (req: Request, res: Response) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-      return res.status(401).json({ message: "Lütfen giriş yapınız." });
+      res.status(401).json({ message: "Lütfen giriş yapınız." });
+      return;
     }
 
     const token = authHeader.split(" ")[1];
@@ -16,13 +17,13 @@ export const updatePasswordController = async (req: Request, res: Response) => {
     const { oldPassword, newPassword, newPasswordConfirm } = req.body;
 
     if (!newPassword || !newPasswordConfirm || !oldPassword) {
-      return res
-        .status(400)
-        .json({ message: "Lütfen tüm alanları doldurunuz." });
+      res.status(400).json({ message: "Lütfen tüm alanları doldurunuz." });
+      return;
     }
 
     if (newPassword !== newPasswordConfirm) {
-      return res.status(400).json({ message: "Yeni şifreler eşleşmiyor." });
+      res.status(400).json({ message: "Yeni şifreler eşleşmiyor." });
+      return;
     }
 
     const user = await User.findOne({
@@ -31,16 +32,17 @@ export const updatePasswordController = async (req: Request, res: Response) => {
     });
 
     if (!user || !user.isActive) {
-      return res.status(403).json({ message: "Hesabınızı aktif etmelisiniz." });
+      res.status(403).json({ message: "Hesabınızı aktif etmelisiniz." });
+      return;
     }
 
     const isMatch = await bcrypt.compare(oldPassword, user.password || "");
     if (!isMatch) {
-      return res.status(400).json({ message: "Eski şifreniz yanlış." });
+      res.status(400).json({ message: "Eski şifreniz yanlış." });
     }
 
     if (oldPassword === newPassword) {
-      return res
+      res
         .status(400)
         .json({ message: "Eski şifreniz yeni şifreniz ile aynı olamaz." });
     }
@@ -51,10 +53,10 @@ export const updatePasswordController = async (req: Request, res: Response) => {
     user.password = hashedPassword;
     await user.save();
 
-    return res.status(200).json({ message: "Şifreniz başarıyla güncellendi." });
+    res.status(200).json({ message: "Şifreniz başarıyla güncellendi." });
   } catch (error) {
     console.error("Şifre güncelleme hatası:", error);
-    return res
+    res
       .status(500)
       .json({ message: "Bir hata oluştu, lütfen tekrar deneyiniz." });
   }

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import axios from "axios";
 import { User } from "../Models/user";
 import { BadRequestError } from "@heaven-nsoft/common";
@@ -8,7 +8,11 @@ import verifyIdToken from "../helpers/verifyIdToken";
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 
-export const googleSigninController = async (req: Request, res: Response) => {
+export const googleSigninController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { idToken, serverAuthCode, user } = req.body;
 
@@ -44,17 +48,17 @@ export const googleSigninController = async (req: Request, res: Response) => {
         });
         await existingUser.save();
 
-        const token = createToken(existingUser._id as string);
+        const token = createToken(JSON.stringify(existingUser._id));
         res.status(200).json({
           user: existingUser,
           googleToken: idToken,
           token: token,
         });
       } else {
-        throw new BadRequestError("Geçersiz kimlik doğrulama yöntemi");
+        next(new BadRequestError("Geçersiz kimlik doğrulama yöntemi"));
       }
     } else {
-      const token = createToken(existingUser._id as string);
+      const token = createToken(JSON.stringify(existingUser._id));
       res.status(200).json({
         user: existingUser,
         googleToken: idToken,
