@@ -11,6 +11,7 @@ import { forgetPasswordResendOTPRouter } from "./routes/forgetPasswordResendOTP"
 import { resetPasswordVerifyOTPRouter } from "./routes/resetPasswordVerifyOTP";
 import { profileRouter } from "./routes/profile";
 import { deleteProfileRouter } from "./routes/deleteProfile";
+import { checkRegisterEmailRouter } from "./routes/checkRegisterEmail";
 
 const app = express();
 app.set("trust proxy", true);
@@ -24,6 +25,7 @@ app.use(registerResendOTPRouter);
 app.use(forgetPasswordResendOTPRouter);
 app.use(resetPasswordVerifyOTPRouter);
 app.use(profileRouter);
+app.use(checkRegisterEmailRouter);
 app.use(deleteProfileRouter);
 
 app.all("*", async (req, res) => {

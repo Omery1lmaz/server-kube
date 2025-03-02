@@ -12,4 +12,4 @@ router.post(
   checkRegisterEmailController
 );
 
-export { router as profileRouter };
+export { router as checkRegisterEmailRouter };
