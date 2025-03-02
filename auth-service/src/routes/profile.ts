@@ -12,4 +12,4 @@ router.post(
   profileController
 );
 
-export { router as forgetPasswordResendOTPRouter };
+export { router as profileRouter };

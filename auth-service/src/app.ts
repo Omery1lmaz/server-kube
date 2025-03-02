@@ -9,6 +9,9 @@ import { updatePhoneNumberRouter } from "./routes/updatePhoneNumber";
 import { registerResendOTPRouter } from "./routes/registerResendOTP";
 import { forgetPasswordResendOTPRouter } from "./routes/forgetPasswordResendOTP";
 import { resetPasswordVerifyOTPRouter } from "./routes/resetPasswordVerifyOTP";
+import { profileRouter } from "./routes/profile";
+import { deleteProfileRouter } from "./routes/deleteProfile";
+
 const app = express();
 app.set("trust proxy", true);
 app.use(json());
@@ -20,6 +23,8 @@ app.use(updatePhoneNumberRouter);
 app.use(registerResendOTPRouter);
 app.use(forgetPasswordResendOTPRouter);
 app.use(resetPasswordVerifyOTPRouter);
+app.use(profileRouter);
+app.use(deleteProfileRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();
