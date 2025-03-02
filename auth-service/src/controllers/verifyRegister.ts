@@ -48,7 +48,7 @@ export const verifyRegisterController = async (req: Request, res: Response) => {
       { isActive: true, otp: null, otpExpires: null }
     );
 
-    const newToken = createToken(user._id as string);
+    const newToken = createToken(JSON.stringify(user._id));
     res.cookie("token", newToken);
 
     return res.status(201).json({

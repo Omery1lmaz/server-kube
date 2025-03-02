@@ -25,6 +25,7 @@ interface UserAttrs {
 
 // **Interface that describes a single user document**
 interface UserDoc extends mongoose.Document {
+  _id: mongoose.Schema.Types.ObjectId;
   email: string;
   password?: string;
   provider: "email" | "google";
