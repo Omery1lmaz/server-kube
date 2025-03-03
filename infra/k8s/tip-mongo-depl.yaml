@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tip-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tip-mongo
+  template:
+    metadata:
+      labels:
+        app: tip-mongo
+    spec:
+      containers:
+        - name: tip-mongo
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tip-mongo-srv
+spec:
+  selector:
+    app: tip-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

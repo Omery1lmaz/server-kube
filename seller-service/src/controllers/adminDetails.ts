@@ -6,7 +6,7 @@ import { createToken } from "../helpers/createToken";
 import transporter from "../utils/mailTransporter";
 import { DecodedToken } from "../types/decodedToken";
 
-const updateWorkingStatusController = async (
+const adminDetailsStatusController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -49,4 +49,4 @@ const updateWorkingStatusController = async (
   }
 };
 
-export default updateWorkingStatusController;
+export default adminDetailsStatusController;

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: invoice-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: invoice-mongo
+  template:
+    metadata:
+      labels:
+        app: invoice-mongo
+    spec:
+      containers:
+        - name: invoice-mongo
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: invoice-mongo-srv
+spec:
+  selector:
+    app: invoice-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
