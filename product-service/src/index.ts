@@ -40,6 +40,7 @@ const start = async () => {
       console.error(err);
     }
     try {
+      console.log(process.env.MONGO_URI, "mongo uri");
       await mongoose.connect(process.env.MONGO_URI);
       console.log("Connected to database !!!");
     } catch (error) {
