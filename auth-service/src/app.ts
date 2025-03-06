@@ -19,8 +19,9 @@ import { detailRouter } from "./routes/details";
 import { updateUserNameRouter } from "./routes/updateUserName";
 
 const app = express();
-app.set("trust proxy", true);
+// app.set("trust proxy", true);
 app.use(json());
+
 app.use(signinRouter);
 app.use(signupRouter);
 app.use(detailRouter);
@@ -39,6 +40,7 @@ app.use(updatePasswordRouter);
 app.use(updateUserNameRouter);
 
 app.all("*", async (req, res, next: NextFunction) => {
+  console.log("a test", req.url, req.baseUrl, req.originalUrl);
   next(new NotFoundError());
 });
 app.use(errorHandler);

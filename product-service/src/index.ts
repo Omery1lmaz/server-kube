@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
-import nats from "node-nats-streaming";
 import { natsWrapper } from "./nats-wrapper";
-import { OrderStatus, Publisher } from "@heaven-nsoft/common";
 import { app } from "./app";
+import { IngredientCreatedEvent } from "./events/listeners/ingredient-created-listener";
 
 const start = async () => {
   try {
@@ -34,6 +33,7 @@ const start = async () => {
         console.log("NATS connection closed!");
         process.exit();
       });
+      new IngredientCreatedEvent(natsWrapper.client).listen();
       process.on("SIGINT", () => natsWrapper.client.close());
       process.on("SIGTERM", () => natsWrapper.client.close());
     } catch (err) {

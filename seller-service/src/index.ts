@@ -17,7 +17,7 @@ const start = async () => {
       throw new Error("NATS_CLUSTER_ID must be defined");
     }
     if (!process.env.RESET_PASSWORD_SECRET_KEY) {
-      throw new Error("RESET_PASSWORD_SECRET_KEY must be defined");
+      throw new Error("RESET_PASSWORD_SECRET_KEY must be defined.");
     }
     if (!process.env.SECRET_KEY) {
       throw new Error("SECRET_KEY must be defined");

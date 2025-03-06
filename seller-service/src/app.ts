@@ -10,7 +10,9 @@ import { getSearchByKitchenRouter } from "./routes/getSearchByKitchen";
 const app = express();
 app.set("trust proxy", true);
 app.use(json());
-
+app.get("/test", (req, res) => {
+  res.status(200).send(req.url);
+});
 app.use(getClosestSellersRouter);
 app.use(getSellerInfoByIdRouter);
 app.use(getSearchRouter);
