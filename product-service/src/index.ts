@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { natsWrapper } from "./nats-wrapper";
 import { app } from "./app";
 import { IngredientCreatedEvent } from "./events/listeners/ingredient-created-listener";
+import { ExtraIngredientCreatedEvent } from "./events/listeners/extra-ingredient-created-listener";
 
 const start = async () => {
   try {
@@ -34,6 +35,7 @@ const start = async () => {
         process.exit();
       });
       new IngredientCreatedEvent(natsWrapper.client).listen();
+      new ExtraIngredientCreatedEvent(natsWrapper.client).listen();
       process.on("SIGINT", () => natsWrapper.client.close());
       process.on("SIGTERM", () => natsWrapper.client.close());
     } catch (err) {
