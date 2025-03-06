@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import nats from "node-nats-streaming";
 import { natsWrapper } from "./nats-wrapper";
-import { OrderStatus, Publisher } from "@heaven-nsoft/common";
 import { app } from "./app";
 
 const start = async () => {

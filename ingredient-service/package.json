@@ -13,7 +13,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@heaven-nsoft/common": "^1.0.3",
+    "@heaven-nsoft/common": "^1.1.17",
     "express": "^4.21.2",
     "mongoose": "^8.10.1",
     "mongoose-update-if-current": "^1.4.0",
