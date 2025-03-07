@@ -46,11 +46,11 @@ const start = async () => {
       console.error("Error connecting to database: ", error);
     }
     app.use((req, res, next) => {
-      console.log("Auth service");
+      console.log("Category service");
       next();
     });
     const listen = app.listen(4001, () => {
-      console.log("Auth service listening on port 3000!");
+      console.log("Category service listening on port 3000!");
     });
     listen.on("error", (err) => {
       console.error("Server error: ", err);
