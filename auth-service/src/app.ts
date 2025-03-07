@@ -40,9 +40,17 @@ app.use(updatePasswordRouter);
 app.use(updateUserNameRouter);
 
 app.all("*", async (req, res, next: NextFunction) => {
-  console.log("a test", req.url, req.baseUrl, req.originalUrl);
   next(new NotFoundError());
 });
-app.use(errorHandler);
+app.use(
+  (
+    err: Error,
+    req: express.Request,
+    res: express.Response,
+    next: NextFunction
+  ) => {
+    errorHandler(err, req, res, next);
+  }
+);
 
 export { app };

@@ -5,6 +5,8 @@ import { createToken } from "../helpers/createToken";
 import nodemailer from "nodemailer";
 import { generateOTP } from "../helpers/generateOTP";
 import transporter from "../utils/mailTransporter";
+import { UserCreatedPublisher } from "../events/publishers/user-created-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 export const signupController = async (req: Request, res: Response) => {
   try {
@@ -17,7 +19,7 @@ export const signupController = async (req: Request, res: Response) => {
     }
 
     const otpToken = generateOTP();
-    const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 dakika geçerli
+    const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
 
     const newUser = new User({
       email,
@@ -36,7 +38,19 @@ export const signupController = async (req: Request, res: Response) => {
     });
 
     const token = createToken(JSON.stringify(newUser._id));
-
+    await new UserCreatedPublisher(natsWrapper.client).publish({
+      id: newUser._id,
+      email: newUser.email,
+      provider: newUser.provider,
+      googleId: newUser.googleId,
+      number: newUser.number,
+      name: newUser.name,
+      address: newUser.address,
+      isActive: newUser.isActive,
+      isDeleted: newUser.isDeleted,
+      imageUrl: newUser.imageUrl,
+      version: newUser.version,
+    });
     res.status(201).json({
       message: "Emailinizi onaylayınız",
       token,

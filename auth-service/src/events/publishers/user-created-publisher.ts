@@ -1,5 +1,5 @@
-import { Subjects, Publisher, OrderCreatedEvent } from '@heaven-nsoft/common';
+import { Subjects, Publisher, UserCreatedEvent } from "@heaven-nsoft/common";
 
-export class UserCreatedPublisher extends Publisher<OrderCreatedEvent> {
-  subject: Subjects.OrderCreated = Subjects.OrderCreated;
+export class UserCreatedPublisher extends Publisher<UserCreatedEvent> {
+  subject: Subjects.UserCreated = Subjects.UserCreated;
 }
