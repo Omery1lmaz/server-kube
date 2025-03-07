@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
-import nats from "node-nats-streaming";
 import { natsWrapper } from "./nats-wrapper";
-import { OrderStatus, Publisher } from "@heaven-nsoft/common";
 import { app } from "./app";
 
 const start = async () => {
@@ -46,11 +44,11 @@ const start = async () => {
       console.error("Error connecting to database: ", error);
     }
     app.use((req, res, next) => {
-      console.log("Auth service");
+      console.log("Modifier Group service");
       next();
     });
     const listen = app.listen(4006, () => {
-      console.log("Auth service listening on port 3000!");
+      console.log("Modifier Group service listening on port 4006!");
     });
     listen.on("error", (err) => {
       console.error("Server error: ", err);

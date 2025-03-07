@@ -35,7 +35,6 @@ export const createIngredientController = async (
     });
     await newIngredient.save();
     const ingredients = await Ingredient.find();
-    console.log("Ingredient test result", JSON.stringify(ingredients));
     await new IngredientCreatedPublisher(natsWrapper.client).publish({
       id: newIngredient._id,
       status: newIngredient.status,

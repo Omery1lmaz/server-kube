@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 // **Interface for required seller attributes when creating a new seller**
 interface SellerAttrs {
@@ -76,6 +77,7 @@ interface SellerDoc extends mongoose.Document {
   orderCompletedDate?: Date;
   waiter?: mongoose.Schema.Types.ObjectId;
   kitchenCategory?: mongoose.Schema.Types.ObjectId[];
+  version: number;
   matchPassword(enteredPassword: string): Promise<boolean>;
 }
 
@@ -131,6 +133,8 @@ const sellerSchema = new mongoose.Schema<SellerDoc>(
 );
 
 sellerSchema.index({ location: "2dsphere" });
+sellerSchema.set("versionKey", "version");
+sellerSchema.plugin(updateIfCurrentPlugin);
 
 sellerSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {

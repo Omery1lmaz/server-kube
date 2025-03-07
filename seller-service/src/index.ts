@@ -44,7 +44,7 @@ const start = async () => {
       console.error("Error connecting to database: ", error);
     }
     app.use((req, res, next) => {
-      console.log("Auth service");
+      console.log("Seller service");
       next();
     });
     const listen = app.listen(5000, () => {
@@ -55,6 +55,7 @@ const start = async () => {
     });
   } catch (error) {
     console.log("Something went wrong", error);
+    console.log("test server error: ", error);
   }
 };
 start();

@@ -4,6 +4,7 @@ import nats from "node-nats-streaming";
 import { natsWrapper } from "./nats-wrapper";
 import { Publisher } from "@heaven-nsoft/common";
 import { UserCreatedEvent } from "./events/listeners/user-created-listener";
+import { ProductCreatedEvent } from "./events/listeners/product-created";
 
 const app = express();
 
@@ -32,6 +33,7 @@ const start = async () => {
         process.exit();
       });
       new UserCreatedEvent(natsWrapper.client).listen();
+      new ProductCreatedEvent(natsWrapper.client).listen();
       process.on("SIGINT", () => natsWrapper.client.close());
       process.on("SIGTERM", () => natsWrapper.client.close());
     } catch (err) {

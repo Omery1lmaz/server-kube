@@ -24,6 +24,14 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
+    - image: 076161/heaven-extra-ingredient
+      context: extra-ingredient-service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
     - image: 076161/heaven-seller
       context: seller-service
       docker:
@@ -98,6 +106,14 @@ build:
             dest: .
     - image: 076161/heaven-ingredient
       context: ingredient-service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
+    - image: 076161/heaven-category
+      context: category-service
       docker:
         dockerfile: Dockerfile
       sync:

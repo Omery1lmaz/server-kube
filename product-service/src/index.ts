@@ -3,6 +3,9 @@ import { natsWrapper } from "./nats-wrapper";
 import { app } from "./app";
 import { IngredientCreatedEvent } from "./events/listeners/ingredient-created-listener";
 import { ExtraIngredientCreatedEvent } from "./events/listeners/extra-ingredient-created-listener";
+import { ModifierGroupCreatedEvent } from "./events/listeners/modifier-group-created-listener";
+import { SellerCreatedEvent } from "./events/listeners/seller-created-listener";
+import { CategoryCreatedEvent } from "./events/listeners/category-created-listener";
 
 const start = async () => {
   try {
@@ -36,6 +39,9 @@ const start = async () => {
       });
       new IngredientCreatedEvent(natsWrapper.client).listen();
       new ExtraIngredientCreatedEvent(natsWrapper.client).listen();
+      new ModifierGroupCreatedEvent(natsWrapper.client).listen();
+      new SellerCreatedEvent(natsWrapper.client).listen();
+      new CategoryCreatedEvent(natsWrapper.client).listen();
       process.on("SIGINT", () => natsWrapper.client.close());
       process.on("SIGTERM", () => natsWrapper.client.close());
     } catch (err) {

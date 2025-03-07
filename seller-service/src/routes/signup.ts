@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post(
   "/signup",
-  signupExpressValidator,
+  // signupExpressValidator,
   validateRequest,
   signupController
 );

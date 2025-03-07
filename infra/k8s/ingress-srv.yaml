@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: ingress-service
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2 # /user'i kaldırıp gerisini alıyoruz
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   ingressClassName: nginx
   rules:
@@ -38,3 +38,31 @@ spec:
                 name: ingredient-srv
                 port:
                   number: 12000
+          - path: /modifier-group(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: option-srv
+                port:
+                  number: 4006
+          - path: /extra-ingredient(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: extra-ingredient-srv
+                port:
+                  number: 4002
+          - path: /product(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: product-srv
+                port:
+                  number: 4007
+          - path: /category(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: category-srv
+                port:
+                  number: 4001

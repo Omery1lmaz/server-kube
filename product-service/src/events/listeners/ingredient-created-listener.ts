@@ -6,8 +6,8 @@ import {
   IngredientCreatedEvent as IngredientCreatedEventHeaven,
 } from "@heaven-nsoft/common";
 import { queueGroupName } from "./queue-group-name";
-import { Ingredient } from "../../models/ingredient";
 import mongoose from "mongoose";
+import { Ingredient } from "../../models/ingredient";
 
 export class IngredientCreatedEvent extends Listener<IngredientCreatedEventHeaven> {
   queueGroupName = queueGroupName;
