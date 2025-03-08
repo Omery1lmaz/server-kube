@@ -3,6 +3,7 @@ import nats from "node-nats-streaming";
 import { natsWrapper } from "./nats-wrapper";
 import { OrderStatus, Publisher } from "@heaven-nsoft/common";
 import { app } from "./app";
+import { SellerCreatedEvent } from "./events/listeners/seller-created-listener";
 
 const start = async () => {
   try {
@@ -34,6 +35,7 @@ const start = async () => {
         console.log("NATS connection closed!");
         process.exit();
       });
+      new SellerCreatedEvent(natsWrapper.client).listen();
       process.on("SIGINT", () => natsWrapper.client.close());
       process.on("SIGTERM", () => natsWrapper.client.close());
     } catch (err) {
