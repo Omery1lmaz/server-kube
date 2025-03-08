@@ -1,0 +1,35 @@
+import { Message } from "node-nats-streaming";
+import {
+  Subjects,
+  Listener,
+  SellerCreatedEvent as SellerCreatedEventHeaven,
+} from "@heaven-nsoft/common";
+import { Seller } from "../../models/seller";
+import { queueGroupName } from "./queue-group-name";
+
+export class SellerCreatedEvent extends Listener<SellerCreatedEventHeaven> {
+  queueGroupName = queueGroupName;
+  subject: Subjects.SellerCreated = Subjects.SellerCreated;
+
+  async onMessage(data: SellerCreatedEventHeaven["data"], msg: Message) {
+    const { id } = data;
+    try {
+      const existingSeller = await Seller.findById(id);
+
+      if (existingSeller) {
+        console.log("seller already exists, skipping event");
+        return msg.ack();
+      }
+      const newSeller = await Seller.create({ _id: id, ...data });
+      console.log(newSeller, "new seller created");
+      const sellers = await Seller.find();
+      console.log(
+        "all sellers after creating new one",
+        JSON.stringify(sellers)
+      );
+      msg.ack();
+    } catch (error) {
+      console.error("Error processing event:", error);
+    }
+  }
+}

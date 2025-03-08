@@ -5,6 +5,7 @@ import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 interface CategoryAttrs {
   name: string;
   description?: string;
+  isActive: boolean;
   user: mongoose.Schema.Types.ObjectId;
 }
 
@@ -13,6 +14,7 @@ interface CategoryDoc extends Document {
   _id: mongoose.Schema.Types.ObjectId;
   name: string;
   description: string;
+  isActive: boolean;
   user: mongoose.Schema.Types.ObjectId;
   version: number;
 }
@@ -29,13 +31,18 @@ const categorySchema = new Schema<CategoryDoc>(
       type: String,
       required: true,
     },
+    isActive: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
     description: {
       type: String,
       default: "",
     },
     user: {
       type: Schema.Types.ObjectId,
-      ref: "Seller", // Referencing the "Seller" model
+      ref: "Seller",
       required: true,
     },
   },
