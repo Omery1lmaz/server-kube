@@ -66,3 +66,10 @@ spec:
                 name: category-srv
                 port:
                   number: 4001
+          - path: /promotion(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: promotion-srv
+                port:
+                  number: 4008
