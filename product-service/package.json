@@ -13,12 +13,14 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@google-cloud/storage": "^7.15.2",
     "@heaven-nsoft/common": "^1.2.8",
     "bcrypt": "^5.1.1",
     "express": "^4.21.2",
     "mongoose": "^8.10.1",
     "mongoose-autopopulate": "^1.1.0",
     "mongoose-update-if-current": "^1.4.0",
+    "multer": "^1.4.5-lts.1",
     "nats": "^2.29.2",
     "node-nats-streaming": "^0.3.2",
     "ts-node-dev": "^1.0.0-pre.44",
@@ -27,6 +29,7 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.0",
+    "@types/multer": "^1.4.12",
     "@types/node": "^22.13.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
