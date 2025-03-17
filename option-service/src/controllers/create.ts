@@ -13,23 +13,23 @@ export const createModifierGroupController = async (
 ) => {
   try {
     const { modifierGroup } = req.body;
-    // const authHeader = req.headers.authorization;
+    const authHeader = req.headers.authorization;
 
-    // if (!authHeader) {
-    //   next(new BadRequestError("Please log in first"));
-    //   return;
-    // }
+    if (!authHeader) {
+      next(new BadRequestError("Please log in first"));
+      return;
+    }
 
-    // const token = authHeader.split(" ")[1];
+    const token = authHeader.split(" ")[1];
 
-    // const decodedToken = jwt.verify(token, process.env.SECRET_KEY!) as {
-    //   id: string;
-    // };
+    const decodedToken = jwt.verify(token, process.env.SECRET_KEY!) as {
+      id: string;
+    };
 
-    // if (!decodedToken?.id) {
-    //   next(new BadRequestError("Invalid or expired token"));
-    //   return;
-    // }
+    if (!decodedToken?.id) {
+      next(new BadRequestError("Invalid or expired token"));
+      return;
+    }
 
     const newModifierGroup = new ModifierGroup({
       ...modifierGroup,
@@ -52,7 +52,7 @@ export const createModifierGroupController = async (
         extraPrice: product.extraPrice,
       })),
       status: newModifierGroup.status,
-      seller: newModifierGroup.seller.toString(),
+      seller: decodedToken.id,
     });
 
     res.status(201).json({ message: "Modifier group created successfully" });

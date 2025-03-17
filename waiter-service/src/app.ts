@@ -8,6 +8,15 @@ app.use(json());
 app.all("*", async (req, res, next: NextFunction) => {
   next(new NotFoundError());
 });
-app.use(errorHandler);
+app.use(
+  (
+    err: Error,
+    req: express.Request,
+    res: express.Response,
+    next: NextFunction
+  ) => {
+    errorHandler(err, req, res, next);
+  }
+);
 
 export { app };

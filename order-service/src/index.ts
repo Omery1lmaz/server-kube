@@ -8,8 +8,7 @@ import { ExtraIngredientCreatedEvent } from "./events/listeners/extra-ingredient
 import { IngredientCreatedEvent } from "./events/listeners/ingredient-created-listener";
 import { ModifierGroupCreatedEvent } from "./events/listeners/modifier-group-created-listener";
 import { SellerCreatedEvent } from "./events/listeners/seller-created-listener";
-
-const app = express();
+import { app } from "./app";
 
 const start = async () => {
   try {
