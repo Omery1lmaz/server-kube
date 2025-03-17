@@ -4,17 +4,18 @@ import { body, validationResult } from "express-validator";
 import { Waiter } from "../models/waiter";
 import { BadRequestError, NotAuthorizedError } from "@heaven-nsoft/common";
 
-const createWaiterController = async (
+const updateWaiterController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  const { id } = req.params;
+  const { name } = req.body;
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     next(new NotAuthorizedError());
     return;
   }
-
   try {
     const token = authHeader.split(" ")[1];
     const decodedToken = jwt.verify(token, process.env.SECRET_KEY!) as {
@@ -26,15 +27,13 @@ const createWaiterController = async (
       return;
     }
 
-    const { waiter } = req.body;
-    const newWaiter = new Waiter({ ...waiter, seller: decodedToken.id });
+    await Waiter.findByIdAndUpdate(id, { name });
 
-    await newWaiter.save();
-    res.status(201).json({ message: "Waiter added successfully" });
+    res.status(201).json({ message: "Waiter updated successfully" });
   } catch (error) {
     console.error("Error adding waiter:", error);
     next(new BadRequestError("Failed to add waiter"));
   }
 };
 
-export default createWaiterController;
+export default updateWaiterController;
