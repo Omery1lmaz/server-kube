@@ -1,36 +1,72 @@
-import mongoose, { Document, Schema, Model } from "mongoose";
+import mongoose, { Schema, Document, Model } from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
-// **Tip Document Interface**
-interface ITip extends Document {
+// **Interface for required attributes when creating a new tip**
+interface TipAttrs {
   seller: mongoose.Schema.Types.ObjectId;
   tip: {
     cost: number;
-    waiter: mongoose.Schema.Types.ObjectId[] | string[];
+    waiter: mongoose.Schema.Types.ObjectId[];
   };
+  order?: mongoose.Schema.Types.ObjectId;
 }
 
-// **Tip Schema**
-const tipSchema = new Schema<ITip>(
+// **Interface that describes a single tip document**
+interface TipDoc extends Document {
+  _id: mongoose.Schema.Types.ObjectId;
+  seller: mongoose.Schema.Types.ObjectId;
+  tip: {
+    cost: number;
+    waiter: mongoose.Schema.Types.ObjectId[];
+  };
+  order?: mongoose.Schema.Types.ObjectId;
+  version: number;
+}
+
+// **Interface for the Tip model (with custom static methods)**
+interface TipModel extends Model<TipDoc> {
+  build(attrs: TipAttrs): TipDoc;
+}
+
+// **Tip Schema Definition**
+const tipSchema = new Schema<TipDoc>(
   {
     seller: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Seller",
       required: true,
     },
     tip: {
-      cost: { type: Number, required: true, default: 0 },
+      cost: {
+        type: Number,
+        required: true,
+        default: 0,
+      },
       waiter: [
         {
-          type: mongoose.Schema.Types.ObjectId,
+          type: Schema.Types.ObjectId,
           ref: "Waiter",
         },
       ],
+    },
+    order: {
+      type: Schema.Types.ObjectId,
+      ref: "Order",
+      required: false,
     },
   },
   { timestamps: true }
 );
 
-// **Tip Model**
-const Tip: Model<ITip> = mongoose.model<ITip>("Tip", tipSchema);
+// **Version Control Plugin**
+tipSchema.set("versionKey", "version");
+tipSchema.plugin(updateIfCurrentPlugin);
+
+// **Static method to create a tip**
+tipSchema.statics.build = (attrs: TipAttrs) => {
+  return new Tip(attrs);
+};
+
+const Tip = mongoose.model<TipDoc, TipModel>("Tip", tipSchema);
 
 export { Tip };
