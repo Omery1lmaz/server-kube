@@ -1,15 +1,15 @@
 import express from "express";
 import { validateRequest } from "@heaven-nsoft/common";
-import updatePasswordExpressValidator from "../expressValidators/updatePassword";
-import updatePasswordController from "../controllers/updatePassword";
+import resetPasswordSendEmailController from "../controllers/resetPasswordSendEmail";
+import resetPasswordSendEmailExpressValidator from "../expressValidators/resetPasswordSendEmail";
 
 const router = express.Router();
 
 router.post(
-  "/update-password",
-  updatePasswordExpressValidator,
+  "/reset-password-send-email",
+  resetPasswordSendEmailExpressValidator,
   validateRequest,
-  updatePasswordController
+  resetPasswordSendEmailController
 );
 
 export { router as resetPasswordSendEmailRouter };

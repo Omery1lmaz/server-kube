@@ -19,25 +19,32 @@ import { detailRouter } from "./routes/details";
 import { updateUserNameRouter } from "./routes/updateUserName";
 
 const app = express();
-// app.set("trust proxy", true);
+app.set("trust proxy", true);
 app.use(json());
 
-app.use(signinRouter);
-app.use(signupRouter);
-app.use(detailRouter);
-app.use(verifyRegisterRouter);
-app.use(googleSigninRouter);
-app.use(updatePhoneNumberRouter);
-app.use(registerResendOTPRouter);
-app.use(forgetPasswordResendOTPRouter);
-app.use(resetPasswordVerifyOTPRouter);
-app.use(profileRouter);
-app.use(checkRegisterEmailRouter);
-app.use(deleteProfileRouter);
-app.use(resetPasswordRouter);
-app.use(resetPasswordSendEmailRouter);
-app.use(updatePasswordRouter);
-app.use(updateUserNameRouter);
+{
+  /* Done Publisher */
+}
+app.use(signupRouter); //   OK  Create a new user account for nats publisher and listener
+app.use(verifyRegisterRouter); // In Progress  Not needed for nats subscription (user:activated)
+app.use(googleSigninRouter); //   OK  Create a new user account for nats publisher and listener
+app.use(updatePhoneNumberRouter); // In Progress  Create a new user updated phone number for nats publisher and listener (user:phone-number-updated)
+app.use(profileRouter); // In Progress  Create a new user updated profile number for nats publisher and listener (user:profile-updated)
+app.use(updateUserNameRouter); // In Progress  Create a new user updated profile number for nats publisher and listener (user:profile-updated)
+
+{
+  /* Not Needed */
+}
+app.use(signinRouter); // Not needed for nats subscription
+app.use(detailRouter); // Not needed for nats subscription
+app.use(registerResendOTPRouter); // Not needed for nats subscription
+app.use(forgetPasswordResendOTPRouter); // Not needed for nats subscription
+app.use(resetPasswordVerifyOTPRouter); // Not needed for nats subscription
+app.use(checkRegisterEmailRouter); // Not needed for nats subscription
+app.use(deleteProfileRouter); // In Progress  Create a new user updated profile number for nats publisher and listener (user:account-deleted-event)
+app.use(resetPasswordRouter); // Not needed for nats subscription
+app.use(resetPasswordSendEmailRouter); // Not needed for nats subscription
+app.use(updatePasswordRouter); // Not needed for nats subscription
 
 app.all("*", async (req, res, next: NextFunction) => {
   next(new NotFoundError());

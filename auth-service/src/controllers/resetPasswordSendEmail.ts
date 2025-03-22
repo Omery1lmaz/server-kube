@@ -12,9 +12,10 @@ export const resetPasswordSendEmailController = async (
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res
+      res
         .status(400)
         .json({ message: "Kullanıcı bulunamadı veya hesabınız aktif değil." });
+      return;
     }
 
     const otpToken = generateOTP();
@@ -46,7 +47,7 @@ export const resetPasswordSendEmailController = async (
       text: emailContent,
     });
 
-    return res.status(200).json({
+    res.status(200).json({
       message: "Şifre değiştirme bağlantısı e-posta adresinize gönderildi.",
       data: { token },
       isSuccess: true,
@@ -54,7 +55,7 @@ export const resetPasswordSendEmailController = async (
     });
   } catch (error) {
     console.error("Şifre sıfırlama hatası:", error);
-    return res
+    res
       .status(500)
       .json({ message: "Bir hata oluştu, lütfen tekrar deneyiniz." });
   }

@@ -4,14 +4,16 @@ import signinController from "../controllers/signin";
 import googleSigninExpressValidator from "../expressValidators/googleSignin";
 import googleSigninController from "../controllers/googleSignin";
 import resetPasswordController from "../controllers/resetPassword";
+import updatePasswordController from "../controllers/updatePassword";
+import updatePasswordExpressValidator from "../expressValidators/updatePassword";
 
 const router = express.Router();
 
 router.post(
   "/reset-password-verify/:otp/:token/:email/:password",
-  googleSigninExpressValidator,
+  updatePasswordExpressValidator,
   validateRequest,
-  resetPasswordController
+  updatePasswordController
 );
 
 export { router as updatePasswordRouter };
