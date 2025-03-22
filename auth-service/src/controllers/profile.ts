@@ -2,6 +2,8 @@ import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 import { User } from "../Models/user";
 import { BadRequestError } from "@heaven-nsoft/common";
+import { UserProfileUpdatedPublisher } from "../events/publishers/user-profile-updated-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 export const profileController = async (req: Request, res: Response) => {
   const authHeader = req.headers.authorization;
@@ -29,7 +31,11 @@ export const profileController = async (req: Request, res: Response) => {
       res.status(404).json({ message: "Kullanıcı bulunamadı" });
       return;
     }
-
+    await new UserProfileUpdatedPublisher(natsWrapper.client).publish({
+      id: updatedUser._id,
+      version: updatedUser.version - 1,
+      name: profile.name,
+    });
     res.status(200).json(updatedUser);
   } catch (error) {
     console.error("Hata:", error);

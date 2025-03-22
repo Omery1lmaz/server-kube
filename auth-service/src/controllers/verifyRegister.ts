@@ -1,9 +1,11 @@
+import { natsWrapper } from "./../../../table-service/src/nats-wrapper";
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 import { User } from "../Models/user";
 import { BadRequestError } from "@heaven-nsoft/common";
 import { createToken } from "../helpers/createToken";
 import { DecodedToken } from "../types/decodedToken";
+import { UserActivatedPublisher } from "../events/publishers/user-activated-publisher";
 
 export const verifyRegisterController = async (req: Request, res: Response) => {
   const { token, otp } = req.params;
@@ -48,7 +50,12 @@ export const verifyRegisterController = async (req: Request, res: Response) => {
       { email: user.email },
       { isActive: true, otp: null, otpExpires: null }
     );
-
+    await new UserActivatedPublisher(natsWrapper.client).publish({
+      id: user._id,
+      email: user.email,
+      isActive: true,
+      version: user.version - 1,
+    });
     const newToken = createToken(JSON.stringify(user._id));
     res.cookie("token", newToken);
 
