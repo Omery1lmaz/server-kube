@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
 
 // **Interface for required user attributes when creating a new user**
 interface UserAttrs {
