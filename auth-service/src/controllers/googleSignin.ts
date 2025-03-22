@@ -4,6 +4,8 @@ import { User } from "../Models/user";
 import { BadRequestError } from "@heaven-nsoft/common";
 import { createToken } from "../helpers/createToken";
 import verifyIdToken from "../helpers/verifyIdToken";
+import { UserCreatedPublisher } from "../events/publishers/user-created-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
@@ -47,6 +49,19 @@ export const googleSigninController = async (
           isActive: true,
         });
         await existingUser.save();
+        await new UserCreatedPublisher(natsWrapper.client).publish({
+          id: existingUser._id,
+          email: existingUser.email,
+          provider: existingUser.provider,
+          googleId: existingUser.googleId,
+          number: existingUser.number,
+          name: existingUser.name,
+          address: existingUser.address,
+          isActive: existingUser.isActive,
+          isDeleted: existingUser.isDeleted,
+          imageUrl: existingUser.imageUrl,
+          version: existingUser.version,
+        });
 
         const token = createToken(JSON.stringify(existingUser._id));
         res.status(200).json({

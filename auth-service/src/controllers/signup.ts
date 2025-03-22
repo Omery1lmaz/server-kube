@@ -11,7 +11,6 @@ import { natsWrapper } from "../nats-wrapper";
 export const signupController = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    console.log("email test", email);
     const existingUser = await User.findOne({ email, isActive: false });
     if (existingUser) {
       res.status(400).json({ message: "User already exists" });

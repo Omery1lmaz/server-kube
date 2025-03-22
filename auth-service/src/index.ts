@@ -35,17 +35,7 @@ const start = async () => {
         console.log("NATS connection closed!");
         process.exit();
       });
-      new UserCreatedPublisher(natsWrapper.client).publish({
-        expiresAt: "new Date().toISOString()",
-        id: "1212",
-        status: OrderStatus.Created,
-        userId: "1212",
-        version: 1,
-        ticket: {
-          id: "2112",
-          price: 10,
-        },
-      });
+
       process.on("SIGINT", () => natsWrapper.client.close());
       process.on("SIGTERM", () => natsWrapper.client.close());
     } catch (err) {
